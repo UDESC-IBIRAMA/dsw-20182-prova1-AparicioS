@@ -4,11 +4,16 @@
  * and open the template in the editor.
  */
 package control;
+import java.util.Optional;
+import javax.validation.Valid;
 import model.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 /**
@@ -26,12 +31,31 @@ public class ClienteResources{
         Iterable<Cliente> listaCliente = cli.findAll();
         return listaCliente;
     }
-   @PostMapping  
-   public Cliente salvar(@RequestBody Cliente cliente){
-       return Cliente.save(cliente);
-   }
+
+       @PostMapping(value = "/adiciona")
+    public Cliente cadastraVeiculo(@RequestBody @Valid Cliente oCliente) {
+        return cli.save(oCliente);
+    }
+    /*
    @DeleteMapping("/{id}")
    public void deletar(Cliente cliente){
        Cliente.delete(cliente);
-   }
+   }*/
+   
+    @PutMapping(value = "/modifica/{id}")
+    public ResponseEntity<Cliente> modificaCliente(@PathVariable("id") Long id, @RequestBody Cliente oCliente) {
+        Optional<Cliente> clienteInfo = cli.findById(id);
+        
+        if (clienteInfo.isPresent()) {
+            Cliente clienteAtual = clienteInfo.get();
+      
+
+          
+            cli.save(clienteAtual);
+            return ResponseEntity.ok(clienteAtual);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+        
+    }
 }
