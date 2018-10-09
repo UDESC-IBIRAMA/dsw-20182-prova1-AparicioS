@@ -5,7 +5,11 @@
  */
 package control;
 import model.Cliente;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 /**
  *
@@ -13,17 +17,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 public class ClienteResources{
-  
+   @Autowired
+    private ClienteRepositorio cli;
     
-    private Cliente cli;
     
-    
-        @GetMapping(value = "/lista")
-    public @ResponseBody
-    Iterable<Veiculo> listaVeiculos() {
-        Iterable<Veiculo> listaVeiculos = vr.findAll();
-        return listaVeiculos;
+    @GetMapping(value = "/lista")
+    public @ResponseBody  Iterable<Cliente> listaCliente() {
+        Iterable<Cliente> listaCliente = cli.findAll();
+        return listaCliente;
     }
-   
-  
+   @PostMapping  
+   public Cliente salvar(@RequestBody Cliente cliente){
+       return Cliente.save(cliente);
+   }
+   @DeleteMapping("/{id}")
+   public void deletar(Cliente cliente){
+       Cliente.delete(cliente);
+   }
 }

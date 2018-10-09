@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -19,7 +20,12 @@ import javax.persistence.Id;
  */
 @Entity
 
-
+@NamedQuery(name = "Cliente.id",
+            query = "select c from Cliente c where c.id = :id")
+/*
+@NamedQuery(name = "Cliente",
+            query = "select c from Cliente c where c.* = :*")
+*/
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
